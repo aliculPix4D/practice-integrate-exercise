@@ -309,7 +309,7 @@ static tone_t	sound;
 static const struct morsetab *hightab;
 
 int
-main(int argc, char *argv[])
+morseExec(int argc, char *argv[])
 {
 	int    ch, lflags;
 	char  *p, *codeset;

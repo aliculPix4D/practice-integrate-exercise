@@ -1,7 +1,10 @@
-cmake_minimum_required(VERSION 3.10)
+# add the library
+add_library(morse src/morse.c)
 
-# set the project name
-project(Morse)
+target_include_directories(morse PUBLIC
+                          "${CMAKE_CURRENT_SOURCE_DIR}/include"
+                          )
 
-# add the executable
-add_executable(Morse morse.c)
+target_compile_options(morse PRIVATE -Werror -Wall)
+
+add_subdirectory(tests)
