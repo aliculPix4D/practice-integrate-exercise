@@ -32,15 +32,15 @@
  * <lyndon@orthanc.ca>
  */
 
+#if 0
 static const char copyright[] =
 "@(#) Copyright (c) 1988, 1993\n\
 	The Regents of the University of California.  All rights reserved.\n";
 
-#if 0
 static char sccsid[] = "@(#)morse.c	8.1 (Berkeley) 5/31/93";
-#endif
 static const char rcsid[] =
  "$FreeBSD$";
+#endif
 
 #include <sys/time.h>
 #include <sys/ioctl.h>
@@ -290,11 +290,12 @@ static char	*device;	/* for tty-controlled generator */
 #define WORD_SPACE (7 - CHAR_SPACE - 1)
 static float	dot_clock;
 static float	cdot_clock;
-static int	spkr, line;
+static int	line;
 static struct termios otty, ntty;
 static int	olflags;
 
 #ifdef SPEAKER
+static int	spkr;
 static tone_t	sound;
 #define GETOPTOPTS "c:d:ef:lprsw:"
 #define USAGE \
