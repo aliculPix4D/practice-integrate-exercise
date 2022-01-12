@@ -42,6 +42,7 @@ static const char rcsid[] =
  "$FreeBSD$";
 #endif
 
+
 #include <sys/time.h>
 #include <sys/ioctl.h>
 
@@ -290,7 +291,7 @@ static char	*device;	/* for tty-controlled generator */
 #define WORD_SPACE (7 - CHAR_SPACE - 1)
 static float	dot_clock;
 static float	cdot_clock;
-static int	line;
+static int line;
 static struct termios otty, ntty;
 static int	olflags;
 
@@ -448,12 +449,12 @@ morseExec(int argc, char *argv[])
 	else if (*argv) {
 		do {
 			for (p = *argv; *p; ++p) {
-				if (eflag)
-					putchar(*p);
+				// if (eflag)
+				// 	putchar(*p);
 				morse(*p);
 			}
-			if (eflag)
-				putchar(' ');
+			// if (eflag)
+			// 	putchar(' ');
 			morse(' ');
 		} while (*++argv);
 	} else {

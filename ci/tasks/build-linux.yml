@@ -1,0 +1,14 @@
+---
+platform: linux
+
+inputs:
+  - name: repo.git
+
+outputs:
+  - name: build-dir
+
+params:
+  BUILD_SHARED_LIBS: OFF
+
+run:
+  path: repo.git/ci/tasks/build-linux.sh

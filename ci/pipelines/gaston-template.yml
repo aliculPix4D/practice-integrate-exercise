@@ -1,0 +1,60 @@
+---
+docker-registry-config: &docker-registry-config
+  username: pix4d
+  password: ((docker_cloud_pix4d_password))
+
+s3-artifacts: &s3-artifacts
+  bucket: ci-pix4d-concourse-pipeline
+  region_name: eu-west-1
+  access_key_id: ((concourse_user_access_key))
+  secret_access_key: ((concourse_user_secret_key))
+
+resources:
+- name: repo.git
+  type: git
+  source: 
+    uri: "https://github.com/aliculPix4D/practice-integrate-exercise"
+    private_key: ((github_ssh_key))
+    branch: main
+
+- name: builder-ubuntu-20.04.docker
+  type: registry-image
+  source:
+    <<: *docker-registry-config
+    repository: docker.ci.pix4d.com/lean-cpp-builder-ubuntu-20.04
+    tag: latest
+
+- name: tester-ubuntu-20.04.docker
+  type: registry-image
+  source:
+    <<: *docker-registry-config
+    repository: docker.ci.pix4d.com/lean-cpp-tester-ubuntu-20.04
+    tag: latest
+
+- name: linux-artifacts.s3
+  check_every: 1h
+  type: s3
+  icon: linux
+  source:
+    <<: *s3-artifacts
+    regexp: artifacts/practice-integrate-exercise/main/linux-artifacts-(.*).txt
+
+jobs:
+- name: build-test-deploy-linux
+  plan:
+   - get: repo.git
+     trigger: true
+   - task: build-linux
+     image: builder-ubuntu-20.04.docker
+     file: repo.git/ci/build-linux.yml
+   - task: unit-linux
+     image: tester-ubuntu-20.04.docker
+     file: repo.git/ci/unit-linux.yml
+   - task: smoke-linux
+     image: tester-ubuntu-20.04.docker
+     file: repo.git/ci/smoke-linux.yml
+   - put: linux-artifacts.s3
+     inputs: [artifacts]
+     params:
+      file: artifacts/linux-artifacts-*
+
