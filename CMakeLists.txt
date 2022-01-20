@@ -1,10 +1,11 @@
 cmake_minimum_required(VERSION 3.21.4)
 
-# set the project name
 project(Gaston C)
 
-add_subdirectory(lib)
+option(BUILD_AND_LINK_LIBS "Build and link libraries" ON)
+
+if(BUILD_AND_LINK_LIBS)
+  add_subdirectory(lib)
+endif()
+
 add_subdirectory(gaston)
-
-
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Werror")
